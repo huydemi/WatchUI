@@ -8,18 +8,31 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+let cellCount = ROWS * COLS
 
+class ViewController: UIViewController {
+  @IBOutlet weak var collectionView: UICollectionView! {
+    didSet {
+      collectionView.dataSource = self
+    }
+  }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
-    // Do any additional setup after loading the view, typically from a nib.
+    
+    collectionView.collectionViewLayout = CollectionViewLayout()
+    collectionView.register(CollectionViewCell.self, forCellWithReuseIdentifier: "MyCell")
   }
-
-  override func didReceiveMemoryWarning() {
-    super.didReceiveMemoryWarning()
-    // Dispose of any resources that can be recreated.
-  }
-
-
+  
 }
 
+extension ViewController: UICollectionViewDataSource {
+  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    return cellCount
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MyCell", for: indexPath)
+    return cell
+  }
+}
